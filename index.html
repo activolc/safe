@@ -140,6 +140,31 @@ button{cursor:pointer;background:none;border:none;color:inherit;font:inherit}
 .fbtn.done{background:var(--color-success);color:#fff;border-color:var(--color-success)}
 .fbtn:disabled{opacity:.4}
 
+/* 사진번호 입력 */
+.photo-input{flex:1;min-width:0;padding:9px 10px;border-radius:10px;font-size:13px;font-weight:600;background:var(--color-surface-offset);border:1.5px solid var(--color-border);color:var(--color-text);text-align:center;min-height:38px}
+.photo-input::placeholder{color:var(--color-text-faint);font-weight:500}
+.photo-input:focus{outline:none;border-color:var(--color-primary);background:var(--color-surface)}
+.photo-input.has-val{background:var(--color-success-soft);border-color:var(--color-success);color:var(--color-success)}
+.photo-foot-label{font-size:11px;font-weight:700;color:var(--color-text-muted);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+
+/* 촬영내역 뷰 */
+.record-wrap{max-width:440px;margin:0 auto;padding:10px 0 calc(28px + env(safe-area-inset-bottom))}
+.record-bar{display:flex;gap:8px;align-items:center;padding:0 16px 10px;position:sticky;top:0;background:var(--color-bg);z-index:20;padding-top:6px}
+.record-bar select{flex:1;padding:9px;border-radius:10px;font-size:13px;font-weight:600;background:var(--color-surface);border:1px solid var(--color-border);color:var(--color-text);min-height:38px}
+.record-bar .rec-count{font-size:12px;color:var(--color-text-muted);font-weight:600;white-space:nowrap}
+.record-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.record-tbl{width:100%;border-collapse:collapse;min-width:560px;font-size:12px}
+.record-tbl thead th{position:sticky;top:54px;background:var(--color-primary);color:#fff;font-weight:700;padding:8px 8px;text-align:left;white-space:nowrap;border:1px solid var(--color-primary);font-size:11px}
+.record-tbl td{padding:8px;border:1px solid var(--color-divider);vertical-align:top;line-height:1.45;background:var(--color-surface)}
+.record-tbl tr:nth-child(even) td{background:var(--color-surface-2)}
+.record-tbl td.c-seq{text-align:center;font-weight:700;white-space:nowrap;color:var(--color-primary)}
+.record-tbl td.c-photo{text-align:center;font-weight:700;color:var(--color-accent);white-space:nowrap;min-width:64px}
+.record-tbl td.c-photo.empty{color:var(--color-text-faint);font-weight:500}
+.record-tbl td.c-proc{white-space:nowrap}
+.rec-export{padding:0 16px 10px}
+.rec-export button{width:100%;padding:11px;border-radius:10px;font-size:13px;font-weight:700;background:var(--color-primary);color:#fff;border:none}
+.rec-export button:active{transform:scale(.98)}
+
 /* Empty / guide */
 .guide{max-width:440px;margin:0 auto;padding:14px 16px calc(28px + env(safe-area-inset-bottom))}
 .guide-item{background:var(--color-surface);border:1px solid var(--color-divider);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow-sm)}
@@ -192,7 +217,7 @@ button{cursor:pointer;background:none;border:none;color:inherit;font:inherit}
 
 <div class="viewtabs">
   <button class="vtab active" data-view="list">촬영포인트</button>
-  <button class="vtab" data-view="guide">촬영 요령</button>
+  <button class="vtab" data-view="record">촬영내역</button>
 </div>
  </div>
 </div>
@@ -201,10 +226,21 @@ button{cursor:pointer;background:none;border:none;color:inherit;font:inherit}
   <section class="view active" id="view-list">
     <div class="list" id="list"></div>
   </section>
-  <section class="view" id="view-guide">
-    <div class="guide">
-      <h2 class="guide-head">증적사진 촬영 요령</h2>
-      <div id="guide-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  <section class="view" id="view-record">
+    <div class="record-wrap">
+      <div class="record-bar">
+        <select id="recFilter" aria-label="공정 필터"></select>
+        <span class="rec-count" id="recCount"></span>
+      </div>
+      <div class="rec-export"><button id="recCopyBtn">촬영내역 텍스트로 복사</button></div>
+      <div class="record-tbl-wrap">
+        <table class="record-tbl" id="recTable">
+          <thead><tr>
+            <th>연번</th><th>공정</th><th>사진번호</th><th>세부공정</th><th>유해위험요인</th><th>감소대책</th>
+          </tr></thead>
+          <tbody id="recBody"></tbody>
+        </table>
+      </div>
     </div>
   </section>
 </main>
@@ -5546,7 +5582,7 @@ const DATA = {
     });
   }
 
-  function itemDone(it){ return it.points.length? it.points.every(pt=>store[key(it.seq,pt.mark)]):false; }
+  function itemDone(it){ return !!store['photo|'+it.seq]; }
 
   const listEl=document.getElementById('list');
   function renderList(){
@@ -5590,9 +5626,12 @@ const DATA = {
         <div class="points-list">${pointsHtml}</div>
         ${it.hazard?`<div class="section-block"><h4>유해위험요인</h4><p>${esc(it.hazard)}</p></div>`:''}
         ${it.counter?`<div class="section-block"><h4>안전보건조치 / 감소대책</h4><p>${esc(it.counter)}</p></div>`:''}
-        <div class="card-foot">
-          <button class="fbtn" data-act="uncheck">초기화</button>
-          <button class="fbtn ${done?'done':'primary'}" data-act="alldone">${done?'완료됨':'전체 촬영완료'}</button>
+        <div class="card-foot" style="flex-direction:column;align-items:stretch;gap:8px">
+          <div class="photo-foot-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>사진번호</div>
+          <div style="display:flex;gap:8px">
+            <input class="photo-input${store['photo|'+it.seq]?' has-val':''}" data-seq="${it.seq}" inputmode="numeric" placeholder="사진번호 입력" value="${esc(store['photo|'+it.seq]||'')}">
+            <button class="fbtn" data-act="clearphoto">초기화</button>
+          </div>
         </div>
       </div>`;
     // events
@@ -5602,10 +5641,16 @@ const DATA = {
     });
     c.querySelectorAll('.fbtn').forEach(btn=>{
       btn.addEventListener('click',e=>{e.stopPropagation();const a=btn.dataset.act;
-        if(a==='alldone'){it.points.forEach(pt=>store[key(it.seq,pt.mark)]=true);save();renderChips();renderList();updateProg();toast('촬영 완료');}
+        if(a==='clearphoto'){delete store['photo|'+it.seq];save();renderChips();renderList();updateProg();renderRecord();toast('사진번호 초기화됨');}
         if(a==='uncheck'){it.points.forEach(pt=>delete store[key(it.seq,pt.mark)]);save();renderChips();renderList();updateProg();toast('초기화됨');}
       });
     });
+    const pinput=c.querySelector('.photo-input');
+    if(pinput){
+      pinput.addEventListener('input',e=>{e.stopPropagation();const v=e.target.value.replace(/\s+/g,'');store['photo|'+it.seq]=v;e.target.value=v;e.target.classList.toggle('has-val',!!v);save();renderChips();updateProg();renderRecord();});
+      pinput.addEventListener('click',e=>e.stopPropagation());
+      pinput.addEventListener('focus',e=>e.stopPropagation());
+    }
     return c;
   }
 
@@ -5618,23 +5663,35 @@ const DATA = {
 
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-  // progress
+  // progress (사진번호 입력 완료 항목 기준)
   function updateProg(){
-    const all=D.items.flatMap(i=>i.points.map(pt=>({seq:i.seq,mark:pt.mark})));
-    const done=all.filter(p=>store[key(p.seq,p.mark)]).length;
-    document.getElementById('pcount').textContent=done+' / '+all.length;
-    document.getElementById('pfill').style.width=(all.length?done/all.length*100:0)+'%';
+    const all=D.items.length;
+    const done=D.items.filter(i=>store['photo|'+i.seq]).length;
+    document.getElementById('pcount').textContent=done+' / '+all;
+    document.getElementById('pfill').style.width=(all?done/all*100:0)+'%';
   }
 
-  // guide
-  function renderGuide(){
-    const g=document.getElementById('guide-list');
-    g.innerHTML='';
-    D.guide.forEach(it=>{
-      const d=document.createElement('div');d.className='guide-item';
-      d.innerHTML=`<h3>${esc(it.cat)}</h3><p>${esc(it.tip)}</p>${it.reason?`<p class="reason">▸ ${esc(it.reason)}</p>`:''}`;
-      g.appendChild(d);
-    });
+  // 촬영내역 뷰
+  function renderRecord(){
+    const sel=document.getElementById('recFilter');
+    const body=document.getElementById('recBody');
+    const cnt=document.getElementById('recCount');
+    // 필터 옵션 채우기 (최초 1회)
+    if(!sel.options.length){
+      sel.innerHTML='<option value="">전체 공정</option>'+D.processes.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');
+      sel.addEventListener('change',renderRecord);
+    }
+    const f=sel.value;
+    const rows=D.items.filter(i=>!f||i.process===f);
+    if(cnt) cnt.textContent=rows.length+'건';
+    body.innerHTML=rows.map(it=>{const ph=store['photo|'+it.seq]||'';return `<tr>
+      <td class="c-seq">${esc(it.seq)}</td>
+      <td class="c-proc">${esc(it.process)}</td>
+      <td class="c-photo${ph?'':' empty'}">${ph?esc(ph):'미입력'}</td>
+      <td>${esc(it.subprocess||it.disaster||'-')}</td>
+      <td>${esc(it.hazard||'-')}</td>
+      <td>${esc(it.counter||'-')}</td>
+    </tr>`;}).join('');
   }
 
   // view tabs
@@ -5644,12 +5701,22 @@ const DATA = {
     const v=t.dataset.view;
     document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
     document.getElementById('view-'+v).classList.add('active');
+    if(v==='record') renderRecord();
   }));
+
+  // 촬영내역 복사
+  document.getElementById('recCopyBtn').addEventListener('click',async()=>{
+    const lines=['연번\t공정\t사진번호\t세부공정\t유해위험요인\t감소대책'];
+    D.items.forEach(it=>{lines.push([it.seq,it.process,store['photo|'+it.seq]||'',it.subprocess||it.disaster||'-',it.hazard||'-',it.counter||'-'].join('\t'));});
+    const txt=lines.join('\n');
+    try{await navigator.clipboard.writeText(txt);toast('촬영내역 복사됨');}
+    catch(e){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('촬영내역 복사됨');}
+  });
 
   // reset
   document.getElementById('resetBtn').addEventListener('click',()=>{
     if(confirm('전체 촬영 진행상황을 초기화할까요?')){
-      store={};save();renderChips();renderList();updateProg();toast('전체 초기화됨');
+      store={};save();renderChips();renderList();updateProg();renderRecord();toast('전체 초기화됨');
     }
   });
 
@@ -5658,7 +5725,7 @@ const DATA = {
   function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1600);}
 
   // init
-  renderChips();renderList();renderGuide();updateProg();
+  renderChips();renderList();renderRecord();updateProg();
 })();
 </script>
 <script data-pplx-inline-edit>
