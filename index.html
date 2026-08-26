@@ -149,20 +149,22 @@ button{cursor:pointer;background:none;border:none;color:inherit;font:inherit}
 
 /* 촬영내역 뷰 */
 .record-wrap{max-width:440px;margin:0 auto;padding:10px 0 calc(28px + env(safe-area-inset-bottom))}
-.record-bar{display:flex;gap:8px;align-items:center;padding:0 16px 10px;position:sticky;top:0;background:var(--color-bg);z-index:20;padding-top:6px}
+.record-bar{display:flex;gap:8px;align-items:center;padding:6px 16px 8px;background:var(--color-bg)}
 .record-bar select{flex:1;padding:9px;border-radius:10px;font-size:13px;font-weight:600;background:var(--color-surface);border:1px solid var(--color-border);color:var(--color-text);min-height:38px}
 .record-bar .rec-count{font-size:12px;color:var(--color-text-muted);font-weight:600;white-space:nowrap}
-.record-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.record-tbl-wrap{overflow:auto;max-height:calc(100dvh - 300px);-webkit-overflow-scrolling:touch;border:1px solid var(--color-divider);border-radius:10px;margin:0 16px;background:var(--color-surface)}
 .record-tbl{width:100%;border-collapse:collapse;min-width:560px;font-size:12px}
-.record-tbl thead th{position:sticky;top:54px;background:var(--color-primary);color:#fff;font-weight:700;padding:8px 8px;text-align:left;white-space:nowrap;border:1px solid var(--color-primary);font-size:11px}
+.record-tbl thead th{position:sticky;top:0;z-index:2;background:var(--color-primary);color:#fff;font-weight:700;padding:8px 8px;text-align:left;white-space:nowrap;border:1px solid var(--color-primary);font-size:11px}
 .record-tbl td{padding:8px;border:1px solid var(--color-divider);vertical-align:top;line-height:1.45;background:var(--color-surface)}
 .record-tbl tr:nth-child(even) td{background:var(--color-surface-2)}
 .record-tbl td.c-seq{text-align:center;font-weight:700;white-space:nowrap;color:var(--color-primary)}
 .record-tbl td.c-photo{text-align:center;font-weight:700;color:var(--color-accent);white-space:nowrap;min-width:64px}
 .record-tbl td.c-photo.empty{color:var(--color-text-faint);font-weight:500}
 .record-tbl td.c-proc{white-space:nowrap}
-.rec-export{padding:0 16px 10px}
-.rec-export button{width:100%;padding:11px;border-radius:10px;font-size:13px;font-weight:700;background:var(--color-primary);color:#fff;border:none}
+.rec-export{padding:0 16px 10px;display:flex;gap:8px}
+.rec-export button{flex:1;padding:11px;border-radius:10px;font-size:13px;font-weight:700;border:none}
+.rec-export button.primary{background:var(--color-primary);color:#fff}
+.rec-export button.secondary{background:var(--color-surface);color:var(--color-text);border:1px solid var(--color-border)}
 .rec-export button:active{transform:scale(.98)}
 
 /* Empty / guide */
@@ -232,7 +234,12 @@ button{cursor:pointer;background:none;border:none;color:inherit;font:inherit}
         <select id="recFilter" aria-label="공정 필터"></select>
         <span class="rec-count" id="recCount"></span>
       </div>
-      <div class="rec-export"><button id="recCopyBtn">촬영내역 텍스트로 복사</button></div>
+      <div class="rec-export">
+        <button id="recCopyBtn" class="primary">촬영내역 복사</button>
+        <button id="recSaveBtn" class="secondary">저장</button>
+        <button id="recLoadBtn" class="secondary">불러오기</button>
+        <input type="file" id="recLoadFile" accept="application/json,.json" style="display:none">
+      </div>
       <div class="record-tbl-wrap">
         <table class="record-tbl" id="recTable">
           <thead><tr>
@@ -5703,6 +5710,26 @@ const DATA = {
     document.getElementById('view-'+v).classList.add('active');
     if(v==='record') renderRecord();
   }));
+
+  // 촬영내역 저장/불러오기
+  function snapshotStore(){const o={};Object.keys(store).forEach(k=>{if(k.startsWith('photo|')&&store[k])o[k]=store[k];});return o;}
+  function applyStore(o){Object.keys(store).forEach(k=>{if(k.startsWith('photo|'))delete store[k];});Object.keys(o||{}).forEach(k=>{if(k.startsWith('photo|')&&o[k]!=null)store[k]=String(o[k]);});save();renderChips();renderList();updateProg();renderRecord();}
+  document.getElementById('recSaveBtn').addEventListener('click',()=>{
+    const data=snapshotStore();
+    if(!Object.keys(data).length){toast('저장할 사진번호가 없습니다');return;}
+    const d=new Date();const ts=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0');
+    const blob=new Blob([JSON.stringify({saved:ts,count:Object.keys(data).length,data:data},null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='촬영내역_'+ts+'.json';a.click();URL.revokeObjectURL(a.href);toast(Object.keys(data).length+'건 저장됨');
+  });
+  const recLoadFile=document.getElementById('recLoadFile');
+  document.getElementById('recLoadBtn').addEventListener('click',()=>recLoadFile.click());
+  recLoadFile.addEventListener('change',e=>{
+    const f=e.target.files&&e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{try{const o=JSON.parse(r.result);if(o&&o.data)applyStore(o.data);else if(o)applyStore(o);toast('불러오기 완료');}catch(err){toast('파일을 읽을 수 없습니다');}};
+    r.onerror=()=>toast('파일 읽기 실패');
+    r.readAsText(f);e.target.value='';
+  });
 
   // 촬영내역 복사
   document.getElementById('recCopyBtn').addEventListener('click',async()=>{
