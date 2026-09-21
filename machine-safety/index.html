@@ -1,97 +1,107 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#102b3a" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="기계안전표" />
-  <title>기계안전 현장표</title>
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <style>
-    :root {--bg:#f4f7f8;--card:#fff;--ink:#17232b;--muted:#64727b;--brand:#173647;--line:#dce5e8;--soft:#eaf4f4;--warn:#a35422}
-    *{box-sizing:border-box} html{-webkit-text-size-adjust:100%}
-    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
-    .top{background:var(--brand);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 18px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(0,0,0,.12)}
-    .title{font-size:22px;font-weight:800}.sub{opacity:.82;font-size:13px;margin-top:5px}.wrap{max-width:760px;margin:0 auto;padding:14px}
-    .toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px}
-    input[type="search"]{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;font-size:16px;padding:12px 13px;outline:none}
-    button{border:0;border-radius:12px;padding:11px 13px;font-size:14px;font-weight:700;background:var(--brand);color:#fff}
-    .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.tab{background:#e7eef1;color:#29414e}.tab.active{background:var(--brand);color:#fff}
-    .panel{display:none}.panel.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:12px 0;box-shadow:0 2px 8px rgba(18,42,52,.04)}
-    .card h2{font-size:18px;margin:0;padding:14px 15px;background:var(--soft);color:#1d5960}.desc{padding:10px 15px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);line-height:1.5}
-    .row{display:grid;grid-template-columns:30px 28px 1fr;gap:7px;align-items:start;padding:12px 13px;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}
-    .row input[type="checkbox"]{width:21px;height:21px;margin:1px 0 0}.num{font-size:13px;color:#73818a;padding-top:3px}.name{font-size:15px;font-weight:760;line-height:1.35}.detail{font-size:13px;color:#4d5d66;margin-top:4px;line-height:1.45}.note{font-size:12.5px;color:var(--warn);margin-top:5px;line-height:1.45}
-    .criteria{padding:14px 15px;font-size:14px;line-height:1.7}.criteria b{color:#204e58}.source{background:#fffaf3;border:1px solid #eed9bd;border-radius:14px;padding:12px 14px;font-size:12.5px;line-height:1.55;color:#67533f;margin:12px 0}.footer{text-align:center;color:#7c8a92;font-size:12px;padding:12px 4px 0}
-    @media(max-width:420px){.wrap{padding:10px}.title{font-size:20px}.row{grid-template-columns:28px 24px 1fr;padding:11px 10px}.name{font-size:14.5px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173647">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="기계안전표">
+<title>기계안전 현장표 · 현행법 대조</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<style>
+:root{--bg:#f4f7f8;--card:#fff;--ink:#17232b;--muted:#64727b;--brand:#173647;--accent:#2c7d86;--line:#dce5e8;--soft:#eaf4f4;--warn:#a35422;--good:#28714f;--red:#a33b31}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+.top{background:var(--brand);color:#fff;padding:calc(17px + env(safe-area-inset-top)) 16px 15px;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px rgba(0,0,0,.14)}.title{font-size:21px;font-weight:800}.sub{font-size:12.5px;opacity:.86;margin-top:4px}
+.wrap{max-width:820px;margin:0 auto;padding:12px}.lawstamp{background:#edf8f3;border:1px solid #c8e4d6;border-radius:13px;padding:11px 13px;font-size:13px;line-height:1.55;margin-bottom:10px}
+.alert{background:#fff4ec;border:1px solid #efcfb6;border-radius:13px;padding:11px 13px;font-size:13px;line-height:1.6;margin:10px 0}.alert b{color:var(--red)}
+.toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;margin:10px 0}input[type=search]{width:100%;border:1px solid var(--line);background:white;border-radius:12px;font-size:16px;padding:12px}.reset{border:0;border-radius:12px;padding:11px 12px;background:#506873;color:#fff;font-weight:700}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.tab{border:0;border-radius:11px;padding:10px 5px;background:#e5ecef;color:#29414e;font-weight:750;font-size:13px}.tab.active{background:var(--brand);color:white}.panel{display:none}.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;overflow:hidden;margin:11px 0;box-shadow:0 2px 8px rgba(18,42,52,.04)}.card h2{font-size:17px;margin:0;padding:13px 14px;background:var(--soft);color:#1d5960}.desc{padding:9px 14px;font-size:12.7px;color:var(--muted);border-bottom:1px solid var(--line);line-height:1.55}
+.item{border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.sum{display:grid;grid-template-columns:28px 25px 1fr;gap:7px;align-items:start;padding:11px 12px}.sum input{width:20px;height:20px;margin:1px 0}.num{font-size:12.5px;color:#78858c;padding-top:3px}.name{font-size:15px;font-weight:780;line-height:1.35}.tag{display:inline-block;margin-left:5px;padding:2px 6px;border-radius:7px;background:#edf4f6;color:#41636b;font-size:11px;font-weight:700}
+details{grid-column:3/4;margin-top:5px}summary{font-size:12.8px;color:#27636b;cursor:pointer;font-weight:700}.body{font-size:13px;line-height:1.62;color:#41525b;padding:8px 0 2px}.body b{color:#243c47}.ex{color:#8b4d27}.law{color:#6b7780;font-size:12px;margin-top:6px}
+.criteria{padding:12px 14px;font-size:13px;line-height:1.7}.criteria b{color:#204e58}.source{font-size:12.5px;line-height:1.6;background:#fffaf3;border:1px solid #eed9bd;border-radius:13px;padding:11px 13px;margin:10px 0}
+a{color:#236773}.footer{text-align:center;color:#7c8a92;font-size:11.5px;padding:12px 4px}.strike{text-decoration:line-through;color:#8b8b8b}
+@media(max-width:430px){.wrap{padding:9px}.title{font-size:20px}.tabs{gap:5px}.tab{font-size:12px;padding:9px 3px}.sum{grid-template-columns:27px 23px 1fr;padding:10px 9px}.name{font-size:14.5px}}
+</style>
 </head>
 <body>
-<header class="top"><div class="title">기계안전 현장표</div><div class="sub">방호장치 · 안전검사 · 안전인증 · 자율안전확인</div></header>
+<header class="top"><div class="title">기계안전 현장표</div><div class="sub">적용범위 · 제외기준 · 최신 법령/공식고시 대조</div></header>
 <main class="wrap">
-  <div class="toolbar"><input id="search" type="search" placeholder="기계명 검색 (예: 압력용기, 혼합기)"><button id="clear">체크초기화</button></div>
-  <div class="tabs"><button class="tab active" data-target="a">방호장치·안전검사</button><button class="tab" data-target="b">안전인증·자율확인</button></div>
-  <section id="a" class="panel active">
-    <div class="card"><h2>M-A1 위험기계·기구별 방호장치 종류 · 14종</h2><div class="desc">점검항목: 위험기계·기구별 적정 안전방호장치 또는 안전덮개 설치 여부</div><div class="rows">
-      <label class="row"><input type="checkbox"><span class="num">1</span><span><span class="name">프레스 및 전단기</span><div class="detail">방호장치(광전자식, 양수조작식, 가드식, 손 쳐내기식, 수인식), 안전블록, 페달의 U자형 덮개, 자동 송급장치, 금형의 안전울</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">2</span><span><span class="name">롤러기</span><div class="detail">급정지장치(손 조작식, 복부 조작식, 무릎 조작식), 울(가드), 안내 롤러</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">3</span><span><span class="name">연삭기</span><div class="detail">덮개, 칩 비산방지장치</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">4</span><span><span class="name">크레인, 곤돌라, 리프트, 승강기</span><div class="detail">과부하방지장치, 권과방지장치 등</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">5</span><span><span class="name">목재가공용 둥근톱</span><div class="detail">반발 예방장치, 날 접촉 예방장치</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">6</span><span><span class="name">동력식 수동대패기</span><div class="detail">날 접촉 예방장치</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">7</span><span><span class="name">아세틸렌 또는 가스집합용접장치</span><div class="detail">안전기(수봉식, 건식)</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">8</span><span><span class="name">방폭용 전기기계기구</span><div class="detail">방폭구조 전기기계기구(내압, 압력, 유입 등)</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">9</span><span><span class="name">교류아크용접기</span><div class="detail">자동전격방지기</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">10</span><span><span class="name">압력용기(공기압축기 포함)</span><div class="detail">압력방출장치, 언로드 밸브</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">11</span><span><span class="name">보일러</span><div class="detail">압력방출장치, 압력제한스위치(온도제한스위치), 고저수위조절장치</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">12</span><span><span class="name">산업용 로봇</span><div class="detail">안전매트, 방호울</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">13</span><span><span class="name">정전 및 활선작업에 필요한 절연용기구</span><div class="detail">절연용 방호구, 활선작업용 기구</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">14</span><span><span class="name">추락, 붕괴 등 위험방호가 필요한 가설기자재</span><div class="detail">비계, 파이프 서포터 등</div></span></label>
-    </div><div class="criteria"><b>M-A1 판단</b><br>양호 = 적정 방호장치·덮개 설치<br>불량 = 미설치(임의해제)·운영 기계·기구 존재<br>해당없음 = 위험기계·기구 없음 / 주의 = N/A</div></div>
+<div class="lawstamp"><b>대조 기준일: 2026-09-21</b><br>산업안전보건법 시행령(시행 2026.8.1.) 및 고용노동부 「안전검사 절차에 관한 고시」 제2026-50호(시행 2026.6.26.), 안전보건공단 산업안전보건인증원 공식 대상·적용범위를 기준으로 정리.</div>
+<div class="alert"><b>현행법 대조에서 수정된 핵심</b><br>① 안전인증 대상 기계·설비는 현재 <b>9종</b>이며, 기계톱은 2020.1.16.부터 삭제됨.<br>② 자율안전확인 대상 기계·설비는 현재 <b>10종</b>이며, 기압조절실은 2020.1.16.부터 삭제됨.<br>③ 안전검사는 <b>15종</b>이며 혼합기·파쇄기/분쇄기는 2026.6.26.부터 적용됨.</div>
+<div class="toolbar"><input id="search" type="search" placeholder="장비명 검색 (예: 압력용기, 혼합기)"><button class="reset" id="clear">체크초기화</button></div>
+<div class="tabs"><button class="tab active" data-target="inspect">안전검사 15</button><button class="tab" data-target="cert">안전인증 9</button><button class="tab" data-target="self">자율확인 10</button></div>
 
-    <div class="card"><h2>M-A2 법적 안전검사 대상 · 15종</h2><div class="desc">점검항목: 위험기계·기구의 법적 안전검사 실시 여부</div><div class="rows">
-      <label class="row"><input type="checkbox"><span class="num">1</span><span class="name">프레스</span></label><label class="row"><input type="checkbox"><span class="num">2</span><span class="name">전단기</span></label>
-      <label class="row"><input type="checkbox"><span class="num">3</span><span><span class="name">크레인</span><div class="detail">정격 하중 2톤 미만 제외</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">4</span><span><span class="name">리프트</span><div class="note">원문 표시: 0.5t 미만 리프트도 안전검사 대상</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">5</span><span><span class="name">압력용기</span><div class="note">원문 표시: 2년마다 (공정안전보고서(PSM) 제출확인 후 4년마다)</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">6</span><span class="name">곤돌라</span></label><label class="row"><input type="checkbox"><span class="num">7</span><span><span class="name">국소배기장치</span><div class="detail">이동식 제외</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">8</span><span><span class="name">원심기</span><div class="detail">산업용</div></span></label><label class="row"><input type="checkbox"><span class="num">9</span><span><span class="name">롤러기</span><div class="detail">밀폐형 구조 제외</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">10</span><span><span class="name">사출성형기</span><div class="detail">형 체결력 294킬로뉴턴 미만 제외</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">11</span><span><span class="name">고소작업대</span><div class="detail">화물자동차 또는 특수자동차에 탑재한 고소작업대만 해당</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">12</span><span class="name">컨베이어</span></label><label class="row"><input type="checkbox"><span class="num">13</span><span class="name">산업용 로봇</span></label>
-      <label class="row"><input type="checkbox"><span class="num">14</span><span><span class="name">혼합기</span><div class="note">사용자 제공 자료 추가 · 모터구동력 1.2kW 이하, 내용적 200리터 미만 제외</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">15</span><span><span class="name">파쇄기·분쇄기</span><div class="note">사용자 제공 자료 추가 · 모터구동력 7.5kW 미만, 시간당 처리량 50kg 미만 제외</div></span></label>
-    </div><div class="criteria"><b>판단기준(원문)</b><br>양호: 산업안전보건법에 따른 법적 검사주기 준수·시행<br>불량: 법적검사 주기 미준수 / 미검사 기계·기구 존재<br>해당없음: 위험기계·기구 없음 / 주의: N/A</div></div>
-    <div class="source">출처 메모: 기존 1~13번 및 방호장치는 첨부 PDF / 안전검사 14·15번은 사용자 제공 이미지에 따라 추가. 추가 2종의 시행일·적용범위·제외기준은 공식 고시 확인 필요. 이 수정본은 최신 법령 대조 완료 자료가 아님.</div>
-  </section>
+<section id="inspect" class="panel active">
+<div class="card"><h2>M-A2 법적 안전검사 대상 · 15종</h2><div class="desc">시행령 제78조 + 「안전검사 절차에 관한 고시」 별표 1 기준. 항목을 눌러 적용범위·제외기준 확인.</div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">1</span><span><span class="name">프레스</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동 프레스·전단기 중 압력능력 3톤 이상.<br><span class="ex"><b>제외:</b> 열간단조프레스, 단조용 해머, 목재 접착용 압착프레스, 분말압축성형기, 압출기·절곡기, 고무·모래 가압성형기, 자동터릿펀칭프레스, Ironworker, 다이스포팅프레스, 교정용 프레스. 또한 스트로크 6mm 이하로 위험한계 내 신체 진입이 불가능한 구조.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">2</span><span><span class="name">전단기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동, 압력능력 3톤 이상.<br><span class="ex"><b>제외:</b> 프레스 항목의 공통 제외기준 및 원형 회전날 전단기, 니블러, 코일 슬리터, 형강·봉강 전용 전단기, 노칭기.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">3</span><span><span class="name">크레인</span><span class="tag">2t 이상</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동, 정격하중 2톤 이상.<br><span class="ex"><b>제외:</b> 건설기계관리법 적용 건설기계, 집게가 붐에 직접 부착된 재활용 처리 크레인, 차량 견인·구난 목적 차량.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">4</span><span><span class="name">리프트</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동 리프트. 건설용은 적재하중 0.5t 이상, 이삿짐 운반용은 0.1t 이상이 실무 기준.<br><span class="ex"><b>제외:</b> 건설용 0.49t 이하, 이삿짐 운반용 0.09t 이하, 운반구 바닥면적 0.5㎡ 이하이면서 높이 0.6m 이하, 자동차정비용 리프트, 사람이 접근할 우려 없는 자동화설비 일부.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">5</span><span><span class="name">압력용기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 화학공정 유체취급용기 또는 그 밖의 공정의 공기·질소 취급용기로 설계압력 0.2MPa(2kgf/㎠) 초과.<br><span class="ex"><b>주요 제외:</b> 치수 150mm(관은 150A) 이하, 원자력용기, 일정 조건의 수냉식 관형응축기, 60℃ 이하 물 전용, 판형 열교환기, 핀형 공기냉각기, 축압기, 유압·수압·공압 실린더, 사람 수용 용기, 차량용 탱크로리, 일부 배관구성품·소음기·스트레이너, 압력×내용적이 0.1 미만인 일부 구성품, 운반용 용기, 직화식 튜브형 가열기, 비산업용 밀폐형 팽창탱크, 안전검사대상 기계 구성품, 소형 공기압축기 구성품, 사용압력 2kgf/㎠ 미만.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">6</span><span><span class="name">곤돌라</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력으로 구동되는 곤돌라.<br><span class="ex"><b>제외:</b> 크레인 설치 곤돌라, 엔진구동 방식, 지면 설치각도 45° 이하.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">7</span><span><span class="name">국소배기장치</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 고시가 정한 유해물질 49종에 따른 건강장해 예방을 위해 설치한 국소배기장치. 이동식은 제외.<br><span class="ex"><b>제외:</b> 최근 2년 작업환경측정 결과가 노출기준의 50% 미만인 경우.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">8</span><span><span class="name">원심기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 액체·고체 등 둘 이상의 물질 분리를 목적으로 동력 작동하는 산업용 원심기.<br><span class="ex"><b>제외:</b> 회전운동에너지 750J 이하, 최고 원주속도 300m/s 초과, 원자력에너지 제품 공정 전용, 자동조작 연속공정용, 화학설비에 해당하는 원심기.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">9</span><span><span class="name">롤러기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 롤러 압력으로 고무·고무화합물·합성수지를 소성변형 또는 연화시키는 동력 구동 롤러기.<br><span class="ex"><b>제외:</b> 작업자가 접근할 수 없는 밀폐형 구조.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">10</span><span><span class="name">사출성형기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 플라스틱·고무 등을 성형하는 동력 구동 사출성형기.<br><span class="ex"><b>제외:</b> 클램핑 인력작동, 반응형, 압축·이송형, 장화제조용, 형 체결력 294kN 미만, 블로우몰딩 머신.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">11</span><span><span class="name">고소작업대</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 자동차관리법상 화물자동차 또는 특수자동차 작업부에 고소장비를 탑재한 차량탑재형 고소작업대.<br><span class="ex"><b>제외:</b> 테일리프트, 승강높이 2m 이하 승강대, 항공기 지상지원 장비, 소방장비, 농업기계화촉진법상 검정 농업용 고소작업차.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">12</span><span><span class="name">컨베이어</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 벨트·체인·롤러·트롤리·버킷·나사 컨베이어가 포함된 동력 운반 시스템.<br><span class="ex"><b>제외:</b> 구동부 전동기 정격출력 합 1.2kW 이하, 대상 컨베이어 총 이송거리 합 10m 이하, 사람 운송용, 일부 항공·항만·광산·공항 설비, 밀폐구조 등 접근 불가 구간, 안전하게 격리된 로봇 셀 내부, 최대 이송속도 150mm/s 이하이면서 위험부 비노출 구간, 특정 이동식/자력추진 시스템 등 고시 제외조건.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">13</span><span><span class="name">산업용 로봇</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 3개 이상 회전관절을 가진 다관절 로봇이 포함된 산업용 로봇 셀.<br><span class="ex"><b>제외:</b> TCP 최대속도 250mm/s 이하만으로 구성, 각 구동모터 80W 이하만으로 구성, 최대 동작영역 0.5m 이하만으로 구성, 설비 내부 밀폐·연동으로 접근 불가, 감응형 방호장치·1.8m 이상 방책 등 고시상 안전격리 조건을 충족하는 셀.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">14</span><span><span class="name">혼합기</span><span class="tag">2026.6.26 시행</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동 회전축에 고정된 날개로 내용물을 저어주거나 섞는 혼합기.<br><span class="ex"><b>제외:</b> 용기회전형, 기류교반형, 구동모터 1.2kW 이하, 내용적 200L 미만, 식품용 중 구동축 수직형, 밀폐 자동투입·배출로 사람 접근 불가, 감응형 방호장치 등으로 격리된 구조, 수처리·슬러지 희석용, 가정용, 압력용기로서 산안법 또는 다른 법령에 따라 안전성 확인을 받은 것.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">15</span><span><span class="name">파쇄기 또는 분쇄기</span><span class="tag">2026.6.26 시행</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동 회전장치 또는 왕복운동기구의 충격력으로 물질을 부수는 파쇄기·분쇄기.<br><span class="ex"><b>제외:</b> 시간당 처리량 50kg 미만, 구동모터 7.5kW 미만, 볼밀·제트밀처럼 회전장치/왕복기구 없이 구체·기체를 이용하는 방식, 식품용, 이동식 목재파쇄기·차량탑재형 세단기 등 이동형, 밀폐 자동투입·배출 및 안전격리 구조, 가정용·사무용 문서세단기, 다른 법령에 따라 안전성 확인을 받은 것.</span></div></details></span></div></div>
+</div>
+<div class="criteria"><b>검사주기 참고:</b> 일반적으로 최초 설치 후 3년 이내 최초검사 후 2년마다. 압력용기는 PSM 제출·확인 대상이면 4년마다. 이동식 크레인·이삿짐운반용 리프트·고소작업대는 신규등록 후 3년 이내 최초검사 후 2년마다.</div>
+</section>
 
-  <section id="b" class="panel">
-    <div class="card"><h2>M-B7 위험기계·기구 안전인증 대상 · 10종</h2><div class="desc">첨부 원문 표기: 산안법 제34조</div><div class="rows">
-      <label class="row"><input type="checkbox"><span class="num">1</span><span class="name">프레스</span></label><label class="row"><input type="checkbox"><span class="num">2</span><span class="name">전단기 및 절곡기</span></label>
-      <label class="row"><input type="checkbox"><span class="num">3</span><span class="name">크레인</span></label><label class="row"><input type="checkbox"><span class="num">4</span><span class="name">리프트</span></label>
-      <label class="row"><input type="checkbox"><span class="num">5</span><span class="name">압력용기</span></label><label class="row"><input type="checkbox"><span class="num">6</span><span class="name">롤러기</span></label>
-      <label class="row"><input type="checkbox"><span class="num">7</span><span class="name">사출성형기</span></label><label class="row"><input type="checkbox"><span class="num">8</span><span class="name">고소작업대</span></label>
-      <label class="row"><input type="checkbox"><span class="num">9</span><span class="name">곤돌라</span></label><label class="row"><input type="checkbox"><span class="num">10</span><span><span class="name">기계톱</span><div class="detail">이동식만 해당한다</div></span></label>
-    </div></div>
-    <div class="card"><h2>M-B7 자율안전확인 신고 대상 · 11종</h2><div class="desc">첨부 원문 표기: 산안법 제35조</div><div class="rows">
-      <label class="row"><input type="checkbox"><span class="num">1</span><span><span class="name">연삭기 또는 연마기</span><div class="detail">휴대형은 제외한다</div></span></label><label class="row"><input type="checkbox"><span class="num">2</span><span class="name">산업용 로봇</span></label>
-      <label class="row"><input type="checkbox"><span class="num">3</span><span><span class="name">혼합기</span><div class="note">원문 이미지 표시: 혼합용기 200L 미만, 모터구동력 1kW 미만 제외</div></span></label><label class="row"><input type="checkbox"><span class="num">4</span><span class="name">파쇄기 또는 분쇄기</span></label>
-      <label class="row"><input type="checkbox"><span class="num">5</span><span><span class="name">식품가공용 기계</span><div class="detail">파쇄·절단·혼합·제면기만 해당</div></span></label><label class="row"><input type="checkbox"><span class="num">6</span><span class="name">컨베이어</span></label>
-      <label class="row"><input type="checkbox"><span class="num">7</span><span class="name">자동차용 리프트</span></label><label class="row"><input type="checkbox"><span class="num">8</span><span><span class="name">공작기계</span><div class="detail">선반, 드릴기, 평삭·형삭기, 밀링만 해당한다</div></span></label>
-      <label class="row"><input type="checkbox"><span class="num">9</span><span><span class="name">고정형 목재가공용 기계</span><div class="detail">둥근톱, 대패, 루타기, 띠톱, 모떼기 기계만 해당한다</div></span></label><label class="row"><input type="checkbox"><span class="num">10</span><span class="name">인쇄기</span></label>
-      <label class="row"><input type="checkbox"><span class="num">11</span><span class="name">기압조절실(chamber)</span></label>
-    </div><div class="criteria"><b>M-B7 판단기준(원문)</b><br>양호: 법적 안전인증 및 자율안전확인 신고된 위험기계·기구 사용<br>불량: 법적 안전인증 및 자율안전확인 신고가 되지 않은 기계·기구 사용<br>해당없음: 위험기계·기구 없음 / 주의: N/A<br><b>KCS마크 확인</b></div></div>
-    <div class="source">출처 메모: 첨부 「정기점검·특별안전점검 항목별 판단기준」('26. 4. 13.) p.5 / 원문의 10종·11종 모두 수록 / 임의 항목 추가 없음. 법 조문 번호(제34조·제35조)는 첨부 원문의 표기이며, 이 표는 원문 재현 자료이고 현행 법령 조문을 대조한 자료가 아님.</div>
-  </section>
-  <div class="source">원본 자료 2종의 내용을 모바일 확인용으로 재구성했습니다. 현행 법령 적용 여부는 최신 고시·법령과 별도 대조가 필요합니다.</div>
-  <div class="footer">체크 상태는 이 기기의 브라우저에만 저장됩니다.</div>
+<section id="cert" class="panel">
+<div class="card"><h2>M-B7 안전인증 대상 기계·설비 · 현행 9종</h2><div class="desc">시행령 제74조 및 안전보건공단 인증원 현행 적용범위 기준. 기존 자료의 '기계톱'은 삭제 대상.</div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">1</span><span><span class="name">프레스</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동 프레스·전단기·절곡기.<br><span class="ex"><b>제외:</b> 열간단조프레스, 단조용 해머, 목재 접착용 압착프레스, 톰슨프레스, 씨링기, 분말압축성형기, 압출기, 고무·모래 가압성형기, 자동터릿펀칭프레스, Ironworker, 다이스포팅프레스, 교정용 프레스, 스트로크 6mm 이하 안전구조, 원형회전 전단기·니블러·코일슬리터·형강/봉강 전용 전단기·노칭기.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">2</span><span><span class="name">전단기 및 절곡기</span><details><summary>적용범위 / 제외기준</summary><div class="body">프레스와 동일한 동력구동 적용범위 및 공통 제외기준 적용.</div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">3</span><span><span class="name">크레인</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동 정격하중 0.5t 이상 크레인(호이스트·차량탑재용 포함).<br><span class="ex"><b>제외:</b> 건설기계관리법 적용 기중기.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">4</span><span><span class="name">리프트</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동 리프트.<br><span class="ex"><b>제외:</b> 적재하중 0.49t 이하 건설용, 0.09t 이하 이삿짐용, 바닥면적 0.5㎡ 이하이면서 높이 0.6m 이하, 자동차정비용, 사람이 접근할 우려가 없는 자동화설비 일부.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">5</span><span><span class="name">압력용기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 화학공정 유체취급용기 또는 공기·질소 취급용기로 설계압력 0.2MPa 초과.<br><span class="ex"><b>제외:</b> 150mm/150A 이하 소형용기, 원자력용기, 일정 수냉식 응축기, 60℃ 이하 물 전용, 판형열교환기, 핀형공기냉각기, 축압기, 실린더, 사람수용 용기, 탱크로리, 일부 배관구성품·소음기·스트레이너, 압력×용적 0.1 미만의 일부 구성품, 운반용 용기, 직화식 튜브형 가열기 등 고시상 제외조건.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">6</span><span><span class="name">롤러기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 고무·합성수지를 소성변형/연화시키는 동력구동 롤러기.<br><span class="ex"><b>제외:</b> 작업자 접근 불가 밀폐형 구조.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">7</span><span><span class="name">사출성형기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 플라스틱·고무 등의 동력 구동 사출성형기.<br><span class="ex"><b>제외:</b> 반응형, 압축·이송형, 장화제조용, 블로우몰딩 머신.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">8</span><span><span class="name">고소작업대</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 사람이 탑승한 작업대를 동력으로 작업위치로 이동시키는 모든 종류·크기(차량탑재 포함).<br><span class="ex"><b>제외:</b> 영구설치 승용승강기, 가이드 없는 케이지, 레일의존 저장·회수장치 승강조작대, 테일리프트, 마스트 승강작업대, 승강높이 2m 이하 승강대, 건설 권상기, 소방장비, 전람회장 장비, 항공기 지상지원 장비, 교량 하부 검사·유지장비, 검정 농업용 고소작업차.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">9</span><span><span class="name">곤돌라</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 구동 곤돌라.<br><span class="ex"><b>제외:</b> 크레인 설치형, 엔진구동, 지면 설치각도 45° 이하, 같은 사업장 안에서 장소를 옮겨 설치하는 곤돌라.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox" disabled><span class="num">삭제</span><span><span class="name strike">기계톱(이동식)</span><div class="body"><b>현행 안전인증 대상 아님.</b> 2020.1.16. 안전인증 대상 설비에서 삭제.</div></span></div></div>
+</div></section>
+
+<section id="self" class="panel">
+<div class="card"><h2>M-B7 자율안전확인 신고 대상 기계·설비 · 현행 10종</h2><div class="desc">시행령 제77조 및 안전보건공단 공식 적용범위 기준. 기압조절실은 삭제됨.</div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">1</span><span><span class="name">연삭기 또는 연마기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 동력 회전 연삭숫돌·연마재 등으로 가공물 표면을 깎거나 절단·광택하는 기계.<br><span class="ex"><b>제외:</b> 휴대형.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">2</span><span><span class="name">산업용 로봇</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 직교좌표로봇 포함, 3축 이상 매니퓰레이터와 전용 제어기를 갖추고 프로그램·자동제어 가능한 고정식 로봇.</div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">3</span><span><span class="name">혼합기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 회전축에 고정된 날개로 내용물을 저어주거나 섞는 것.<br><span class="ex"><b>제외:</b> 용기회전형, 기류교반형, 혼합용기 200L 미만 <u>또는</u> 모터 구동력 1kW 미만, 식품용.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">4</span><span><span class="name">파쇄기 또는 분쇄기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 암석·금속·플라스틱 등을 필요한 크기로 파쇄·분쇄하는 것.<br><span class="ex"><b>제외:</b> 식품용, 시간당 파쇄·분쇄용량 50kg 미만.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">5</span><span><span class="name">식품가공용 기계</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 식품파쇄기·식품절단기·식품혼합기·제면기만 해당. 각 기계의 세부 제작·안전기준은 「위험기계·기구 자율안전확인 고시」 별표 5에 따름.</div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">6</span><span><span class="name">컨베이어</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 벨트/체인, 롤러, 트롤리, 버킷, 나사 컨베이어 등 동력 자동 연속운반 장치.<br><span class="ex"><b>제외:</b> 이송거리 3m 이하.</span></div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">7</span><span><span class="name">자동차정비용 리프트</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 차량을 적재하고 동력으로 들어올려 점검·정비에 사용하는 장치.</div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">8</span><span><span class="name">공작기계</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 선반, 드릴기, 평삭기, 형삭기, 밀링기만 해당.</div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">9</span><span><span class="name">고정형 목재가공용 기계</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 고정형 둥근톱, 대패, 루타기, 띠톱, 모떼기 기계만 해당.</div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox"><span class="num">10</span><span><span class="name">인쇄기</span><details><summary>적용범위 / 제외기준</summary><div class="body"><b>적용:</b> 판면에 잉크를 묻혀 종이·필름·섬유 등 표면에 눌러 인쇄하는 기계. 절단기·제본기·종이반전기 등 부속장치를 포함.</div></details></span></div></div>
+<div class="item"><div class="sum"><input type="checkbox" disabled><span class="num">삭제</span><span><span class="name strike">기압조절실(chamber)</span><div class="body"><b>현행 자율안전확인 대상 아님.</b> 2020.1.16. 대상 설비에서 삭제.</div></span></div></div>
+</div></section>
+
+<div class="source"><b>공식 근거</b><br>
+• 산업안전보건법 시행령 제78조(안전검사대상기계등), 시행 2026.8.1.<br>
+• 고용노동부고시 제2026-50호 「안전검사 절차에 관한 고시」, 시행 2026.6.26.<br>
+• 고용노동부고시 제2026-49호 「안전검사 고시」, 시행 2026.6.26.<br>
+• 안전보건공단 산업안전보건인증원 ‘안전인증 / 자율안전확인 / 안전검사 대상 및 적용범위’ 공식 페이지.<br><br>
+<a href="https://www.law.go.kr/admRulInfoP.do?admRulSeq=2100000281068" target="_blank">국가법령정보센터: 안전검사 절차에 관한 고시</a><br>
+<a href="https://www.law.go.kr/admRulInfoP.do?admRulSeq=2100000281066" target="_blank">국가법령정보센터: 안전검사 고시</a><br>
+<a href="https://miis.kosha.or.kr/oshci/busi/viewMiisSafetyMachandiseInfo.do" target="_blank">KOSHA: 안전검사 대상 및 적용범위</a><br>
+<a href="https://miis.kosha.or.kr/oshci/busi/viewMiisMerchandiseInfo.do" target="_blank">KOSHA: 안전인증 대상 및 적용범위</a><br>
+<a href="https://miis.kosha.or.kr/oshci/busi/viewMiisJayulMerchandiseInfo.do" target="_blank">KOSHA: 자율안전확인 대상 및 적용범위</a>
+</div>
+<div class="footer">현장 판정 전에는 장비 명판·정격·구조·용도와 최신 고시 원문을 함께 확인하세요. 체크 상태는 이 기기 브라우저에 저장됩니다.</div>
 </main>
 <script>
 const tabs=[...document.querySelectorAll('.tab')],panels=[...document.querySelectorAll('.panel')];
 tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.toggle('active',x===t));panels.forEach(p=>p.classList.toggle('active',p.id===t.dataset.target));}));
-const boxes=[...document.querySelectorAll('input[type=checkbox]')];
-boxes.forEach((b,i)=>{const k='machine-safety-check-'+i;b.checked=localStorage.getItem(k)==='1';b.addEventListener('change',()=>localStorage.setItem(k,b.checked?'1':'0'));});
-document.getElementById('clear').addEventListener('click',()=>{if(confirm('모든 체크 표시를 초기화할까요?'))boxes.forEach((b,i)=>{b.checked=false;localStorage.removeItem('machine-safety-check-'+i);});});
-document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();document.querySelectorAll('.row').forEach(r=>r.style.display=(!q||r.innerText.toLowerCase().includes(q))?'grid':'none');});
-</script></body></html>
+const boxes=[...document.querySelectorAll('input[type=checkbox]:not([disabled])')];
+boxes.forEach((b,i)=>{const k='machine-law-check-'+i;b.checked=localStorage.getItem(k)==='1';b.addEventListener('change',()=>localStorage.setItem(k,b.checked?'1':'0'));});
+document.getElementById('clear').addEventListener('click',()=>{if(confirm('모든 체크 표시를 초기화할까요?'))boxes.forEach((b,i)=>{b.checked=false;localStorage.removeItem('machine-law-check-'+i);});});
+document.getElementById('search').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();document.querySelectorAll('.item').forEach(r=>r.style.display=(!q||r.innerText.toLowerCase().includes(q))?'block':'none');});
+</script>
+</body></html>
