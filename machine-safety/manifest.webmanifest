@@ -1,0 +1,9 @@
+{
+  "name": "기계안전 현장표",
+  "short_name": "기계안전표",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f8",
+  "theme_color": "#173647",
+  "lang": "ko"
+}
